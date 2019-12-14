@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+          <record model="ir.ui.view" id="allocation_addonxx1x" >
+            <field name="name">account.payment</field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id" ref="account.view_account_payment_form" />
+            <field name="arch" type="xml">
+
+
+                <xpath expr="//button[@name='post']" position="replace">
+                           <button name="post" class="oe_highlight" states="draft" string="Confirm" type="object"/>
+                </xpath>
+                <xpath expr="//field[@name='payment_date']" position="after">
+                           <field name="direct_labour_idx" states="draft" invisible="1"/>
+                </xpath>
+
+            </field>
+        </record>
+
+
+        <record id ="direct_labourx_form_view_3" model ="ir.ui.view">
+            <field name="name">direct.labour.x</field>
+
+            <field name="model">direct.labourx</field>
+            <field eval="25" name="priority"/>
+            <field name ="arch" type="xml">
+                <form string="DL Payment">
+                <header>
+                    <button name="submit_Pm_qs" states="sm" string="Submit to Supervisor" type="object" class="btn-primary" groups="labour_payment.group_sm1,labour_payment.group_allbh"/>
+                    <button name="submit_qs_gm" states="sup" string="Send to Team Head" type="object" class="btn-primary" groups="labour_payment.group_supervix,labour_payment.group_allbh"/>
+                    <button name="Sendteam_pm" states="team" string="Send to PM" type="object" class="btn-primary" groups="labour_payment.group_teamhead,labour_payment.group_allbh"/>
+                    <button name="Sendpm_sm2" states="pm" string="Send to Audit" type="object" class="btn-primary" groups="labour_payment.group_pmx,labour_payment.group_allbh"/>
+
+                    <button name="submitAudit_SM" states="aud" string="Submit to Site Manager" type="object" class="btn-primary" groups="labour_payment.group_sm2,labour_payment.group_allbh"/>
+                    <button name="submitCooAcc" states="sm2" string="Send to Account" type="object" class="btn-primary" groups="labour_payment.group_audittx,labour_payment.group_allbh"/>
+                    <!--<button name="account_account_to_audit2" states="account" string="Send to Audit(2nd)" type="object" class="btn-primary" groups="account.group_account_user,account.group_account_manager,labour_payment.group_allbh"/>
+                    <button name="audit2_accountx" states="audx" string="Send to Account(2nd)" type="object" class="btn-primary" groups="labour_payment.group_audittx,labour_payment.group_allbh"/>
+
+                    <button name="account_payment" states="accountx" string="Validate Payment" type="object" class="btn-primary" groups="account.group_account_user,account.group_account_manager,labour_payment.group_allbh"/>
+-->
+
+
+
+
+                    <button name="refuse_gm" states="pm,team" string="Reject" type="object" class="btn-primary" groups="labour_payment.group_imprest_xx_manager,labour_payment.group_allbh"/>
+                    <button name="refuse_coo" states="account" string="Reject" type="object" invisible="1" class="btn-primary" groups="account.group_account_manager,labour_payment.group_allbh"/>
+
+                    <button name="set_draft" states="refused" string="Set Draft" type="object" class="btn-primary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="sm,sup,team,pm,aud,sm2,account" /><!--statusbar_visible="draft,reported,done,refused"-->
+
+
+                    </header>
+                    <sheet>
+                    <div class="oe_button_box">
+                        <button name="button_send_back"
+                            class="oe_stat_button"
+                            icon="fa-angle-double-left"
+                            type="object" string="Return DL Payment">
+
+                        </button>
+                    </div>
+
+                    <div class="oe_title">
+                        <label for="name"/>
+                            <h1>
+                                <field name="name" placeholder="e.g. Labour Payment"/>
+                            </h1>
+                        </div>
+                        <group>
+                            <group>
+                                <field name="employee_id" attrs="{'readonly':[('state','in',['headunit','manager','ed','coo','account','post','done'])]}"/>
+                                <field name="dept_ids"/>
+
+
+                                <field name="date"/>
+                                <field name="branch_id"/>
+                                <field name="project_name" />
+                                <field name="plot_id"/>
+                                 <field name="partner_id" string="Vendor Name"/>
+
+                                <field name ="users_followers" widget="many2many_tags" required="0"/>
+                                <field name="direct_memo_user"/>
+                            </group>
+
+                            <group>
+                                <field name="house_type"/>
+                                <field name="boq_id"/>
+                                <field name="budget_id"/>
+                                <field name="labour" string="Labour Name"/>
+                                <field name = "product_qty"/>
+                                <field name="amountfig" string="Amount" required="1" readonly="0" />
+                                <field name="project_id"/>
+                                <field name="file_upload"/>
+                                <field name="status_progress" widget="percentpie" string="Progress(%)"/>
+
+
+                            </group>
+
+
+                        </group>
+                        <notebook>
+                        <page name='add_note' string='Comment'>
+                            <field name="description" string = "Add Notes" placeholder="Notes..." widget="html"/>
+                        </page>
+
+                        <page name='reason_backs' string='Return Reason'>
+                            <field name="reason_back" readonly = "0" string = "Add Notes" placeholder="Notes..." widget="html"/>
+                        </page>
+
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+						<field name="message_follower_ids" widget="mail_followers"/>
+						<field name="message_ids" widget="mail_thread"/>
+					</div>
+                </form>
+            </field>
+        </record>
+
+        <record id="directx_labour_view2_tree" model="ir.ui.view">
+            <field name="name">Labour Payment Tree</field>
+            <field name="model">direct.labourx</field>
+            <field name="arch" type="xml">
+                <tree string="Labour Payment">
+
+                    <field name="date"/>
+                    <field name="name"/>
+                    <field name="employee_id"/>
+
+                    <field name="state"/>
+                    <field name="status_progress" widget="progressbar" string="Progress(%)"/>
+                </tree>
+            </field>
+        </record>
+
+    <record model="ir.ui.view" id="directx_labour_search_view">
+      	<field name="name">Labour Payment Search</field>
+		    <field name="model">direct.labourx</field>
+		    <field name="arch" type="xml">
+				 <search string="Direct Labour Payment">
+
+						<field name="name"/>
+						<field name="state" />
+                        <field name="date" />
+
+					 <group expand="0" string="Group By">
+				       <filter string="Name" icon="terp-personal" domain="[]" context="{'group by':'name'}" />
+					   <filter string="State" icon="terp-personel" domain="[]" context="{'group by':'state'}" />
+                       <filter string="Date" icon="terp-personal" domain="[]" context="{'group by':'date'}" />
+                    </group>
+			  </search>
+		 	</field>
+	  </record>
+
+
+
+      <record id="dl_back_wizardx" model="ir.ui.view">
+            <field name="name">DL Back</field>
+            <field name="model">dl.refused.wizardx</field>
+            <field name="arch" type="xml">
+                <form String="Reason for Returning">
+                    <group>
+                        <group>
+                            <field name="memo_record" readonly="1"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="resp" readonly="0"  invisible="1"/>
+                            <field name="direct_memo_user" string ="Initiator"/>
+                        </group>
+                            <field name="reason" placeholder="Please Add Reason(s) ..." colspan="4"/>
+                    <footer>
+                        <button name="post_back" type="object" string="Return" class="oe_highlight"/>
+                            <button string="Cancel" class="oe_link" special="cancel"/>
+                        </footer>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="dl_message_wizardx" model="ir.ui.view">
+            <field name="name">Reject Back</field>
+            <field name="model">dl.messagex</field>
+            <field name="arch" type="xml">
+                <form String="Reject">
+                    <group>
+                        <group>
+                            <field name="memo_record" readonly="1"/>
+                            <field name="date"/>
+                        </group>
+                        <group>
+                            <field name="resp" readonly="0"  invisible="1"/>
+                            <!--<field name="direct_memo_user" string ="Initiator"/> -->
+                        </group>
+                            <field name="reason" placeholder="Please Add Reason(s) ..." colspan="4"/>
+                    <footer>
+                        <button name="post_refuse" type="object" string="Refuse" class="oe_highlight"/>
+                            <button string="Cancel" class="oe_link" special="cancel"/>
+                        </footer>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+
+<act_window id="dl_payment_actionx"
+name="Labour Payment"
+res_model="direct.labourx"
+view_mode="tree,form"/>
+
+
+    <record model="ir.ui.view" id="purchase_inherit_bandh" >
+            <field name="name">purchase.order</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='state']" position="replace">
+                    <field name="state" widget="statusbar" statusbar_visible="officer,pm,draft,sent,purchase" readonly="1"/>
+                </xpath>
+                <xpath expr="//button[@id='bid_confirm']" position="before">
+                    <button name="button_request_approval_by_officer" type="object" states="officer" class="oe_highlight" string="Send to Procurement officer2"
+                    groups="purchase.group_purchase_user,base.group_system,purchase.group_purchase_manager"/>
+            </xpath>
+
+            <xpath expr="//field[@name='currency_id']" position="after">
+                    <field name="note" string="Term and Condition" placeholder="Terms and Conditions" colspan="4" invisible="1"/>
+            </xpath>
+
+                <xpath expr="//button[@id='draft_confirm']" position="attributes">
+                    <attribute name="groups">purchase.group_purchase_manager,base.group_system</attribute>
+                </xpath>
+
+                <xpath expr="//button[@id='draft_confirm']" position="attributes">
+                    <attribute name="groups">purchase.group_purchase_manager,base.group_system</attribute>
+
+                </xpath>
+
+
+                <xpath expr="//button[@id='bid_confirm']" position="attributes">
+                    <attribute name="groups">purchase.group_purchase_manager,base.group_system</attribute>
+                </xpath>
+                <xpath expr="//button[@name='button_approve']" position="attributes">
+                    <attribute name="groups">purchase.group_purchase_manager,base.group_system</attribute>
+                </xpath>
+                <xpath expr="//button[@name='button_done']" position="attributes">
+                    <attribute name="groups">purchase.group_purchase_manager,base.group_system</attribute>
+                </xpath>
+                <xpath expr="//button[@name='button_unlock']" position="attributes">
+                    <attribute name="groups">purchase.group_purchase_manager,base.group_system</attribute>
+                </xpath>
+
+            </field>
+        </record>
+
+
+
+          <menuitem id="dl_menu_main2x" name="Labour Payments" parent = "construction_material.constructionmat_requ_menu" sequence = "3"/>
+
+            <menuitem id="dl_main_menu_viewx" name="Payment Request" parent="dl_menu_main2x" action="dl_payment_actionx"/>
+
+
+    </data>
+</odoo>
